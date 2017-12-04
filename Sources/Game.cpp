@@ -2,7 +2,7 @@
 
 
 // TODO: 砲台の位置を画面左に、ターゲットの位置を画面右に移動させる。(A)
-// TODO: 雲の位置を左から右に動かす。見えなくなったら左端に戻す。(B)
+// TODO: 雲の位置を左から右に動かす。見えなくなったら左端に戻す。(B)(HW16A048 桂脩也)
 // TODO: 砲台を青い壁に沿って上下に動かす。(C)
 // TODO: 弾のスピードを速くし、弾が画面右端を通り越したら再度発射可能にする。(D)
 // TODO: スコアのサイズを大きくする。(E)
@@ -25,6 +25,7 @@ void Start()
     cannonPos = Vector2(-80, -150);
     targetRect = Rect(80, -140, 40, 40);
     bulletPos.x = -999;
+    cloudPos.x = -533;
     score = 0;
 }
 
@@ -36,6 +37,7 @@ void Update()
         bulletPos = cannonPos + Vector2(50, 10);
     }
 
+    
     // 弾の移動
     if (bulletPos.x > -999) {
         bulletPos.x += 10 * Time::deltaTime;
@@ -45,9 +47,17 @@ void Update()
         if (targetRect.Overlaps(bulletRect)) {
             score += 1;         // スコアの加算
             bulletPos.x = -999; // 弾を発射可能な状態に戻す
-        }
-    }
 
+        }
+        
+        // 雲の移動
+        if (cloudPos.x > -600){
+            cloudPos.x += 60 * Time::deltaTime;
+            if (cloudPos.x > 320){
+                cloudPos.x -= -533;
+                
+            }
+        }
     // 背景の描画
     Clear(Color::cyan);
     FillRect(Rect(-320, -240, 640, 100), Color::green);
@@ -71,5 +81,5 @@ void Update()
     SetFont("nicoca_v1.ttf", 20.0f);
     DrawText(FormatString("%02d", score), Vector2(-319, 199), Color::black);
     DrawText(FormatString("%02d", score), Vector2(-320, 200), Color::white);
+  }
 }
-
